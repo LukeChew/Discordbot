@@ -2,13 +2,6 @@ import discord
 import random
 from discord.ext import commands
 
-
-
-
-
-
-
-
 client = commands.Bot(command_prefix = '.')
 @client.event
 async def on_ready():
@@ -26,6 +19,48 @@ async def on_member_remove(member):
 async def ping(ctx):
     await ctx.send(client.latency * 1000)
 
+@client.command()
+async def play(ctx):
+    await client.change_presence(activity=discord.Game("with " + format(ctx.author.display_name)))
+ #   await ctx.send("I am now playing with " + format(ctx.author.display_name))
+                                 
+@client.command()
+async def sorry(ctx):
+    await ctx.send(format(ctx.author.display_name) + " is sorry")
+
+@client.command()
+async def cheese(ctx):
+    cheeses = ["Cheddar", "Mozzarella", "Gouda", "Havarti", "Swiss", "Brie", "Blue", "Goat", "Marble", "Feta", "Camembert"]
+    await ctx.send(format(ctx.author.display_name) + " has eaten a nice " + random.choice(cheeses) +" cheese")
+
+@client.command()
+async def notsorry(ctx):
+    await ctx.send(format(ctx.author.display_name) + " is not sorry")
+
+@client.command()
+async def shoot(ctx):
+    await ctx.send(format(ctx.author.display_name) + " has been watered!")
+
+@client.command()
+async def dryclean(ctx):
+    await ctx.send(format(ctx.author.display_name) + " has given their clothes a thorough cleaning!")
+
+@client.command()
+async def clean(ctx, member:discord.Member):
+    await ctx.send(format(ctx.author.display_name) + " has cleaned " + format(member.display_name) + "'s clothes!")
+    
+@client.command()
+async def shootat(ctx, member:discord.Member):
+    r = random.random()
+    if (r > 0.9):
+        await ctx.send(format(ctx.author.display_name) + " forgot to load their water gun!")
+    elif (r > 0.7):
+        await ctx.send(format(ctx.author.display_name) + " missed!")
+    elif (r > 0.6):
+        await ctx.send(format(ctx.author.display_name) + " tried to water " + format(member.display_name) + " but they watered back! " + format(ctx.author.display_name) + " has been watered!")
+    else:
+        await ctx.send(format(member.display_name) + " has been watered!")
+    
 @client.command()
 async def bane(ctx):
     responses= [ '“I am Darth Bane, Dark Lord of the Sith. I will survive. At any cost.”',
@@ -67,11 +102,11 @@ async def clear(ctx, amount=11):
     await ctx.channel.purge(limit=amount)
 
 @client.command()
+@commands.has_role('Admin')
 async def kick(ctx, member:discord.Member, *, reason=None):
     await member.kick(reason=reason)
 
 @client.command()
+@commands.has_role('Admin')
 async def ban(ctx, member:discord.Member, *, reason=None):
     await member.ban(reason=reason)
-
-
